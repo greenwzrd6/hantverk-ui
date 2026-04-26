@@ -4,31 +4,34 @@
     display: flex;
     margin: 0 auto;
     flex-direction: column;
+    width: 1440px;
     font-style: Inter, sans-serif;
-    padding: 1%;
     align-items: center;
 }
 
 .header {
     display: flex;
     flex-direction: column;
+    min-width: 1100px;
+    padding-inline: 1%;
 }
 
 .header h1 {
     font-size: 1rem;
     font-weight: 300;
+    position: relative;
 }
 
 .inner-header {
     display: flex;
     flex-direction: row;
-    width: 50rem;
     justify-content: space-between;
     align-items: center;
 }
 
 .inner-header-left {
-    /* not done yet */
+    display: flex;
+    margin-inline-start: 6rem;
 }
 
 .inner-header-right {
@@ -69,9 +72,24 @@
     height: 16px;
 }
 
+.sort-worker {
+    display: flex;
+    flex-direction: row;
+}
+
 .dates {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    gap: 9rem;
+    width: 55%;
+    padding-inline-start: 216px;
+}
+
+.dates-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .worker-list {
@@ -82,4 +100,53 @@
 .worker-row {
     display: flex;
     flex-direction: row;
+    border-block-start: 1px black solid;
+    padding-block: 1%;
+    justify-content: flex-start;
+}
+
+.worker-name-profession {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-inline-end: 1rem;
+    color: black;
+    font-size: 14px;
+    font-weight: 400;
+    width: 200px;
+}
+
+.name {
+    margin-inline-end: 0.5rem;
+    white-space: nowrap;
+}
+
+.profession {
+    background-color: #FFF5E6;
+    padding: 4px 8px;
+    border-radius: 5px;
+    height: 1rem;
+}
+
+.weeks-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    margin-inline-start: 10px;
+    justify-content: space-between;
+}
+
+.week {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+.week img {
+    width: 40px;
+    height: auto;
+}
+
+.worker-list .worker-row:last-child {
+    border-block-end: 1px black solid;
 }

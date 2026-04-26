@@ -21,6 +21,7 @@ const iconData =
 function getMonth(startDate) {
     const days = []
     const date = new Date(startDate)
+    date.setHours(12, 0, 0, 0)
     while (days.length < 20) {
         const day = date.getDay()
         if (day !== 0 && day !== 6) {
@@ -56,7 +57,7 @@ function getWeekNumber(dateString) {
 
     const dayNum = (date.getDay() + 6) % 7
 
-    //ISO-datum är baserade på torsdagar
+    //ISO-dates are based on Thursdays
     const firstThursday = dateCopy.setDate(dateCopy.getDate() - dayNum + 3).valueOf()
 
     dateCopy.setMonth(0, 1)
@@ -65,11 +66,150 @@ function getWeekNumber(dateString) {
         dateCopy.setMonth(0, 1 + ((4 - dateCopy.getDay()) + 7) % 7)
     }
 
-    // Returnerar veckonumret genom att ta den första torsdagen och ta 
     return 1 + Math.ceil((firstThursday - dateCopy) / 604800000)
 }
 
 //Components
+const NavButtons = {
+    template: `
+                    <div class="nav-buttons">
+                        <button @click="$emit('prev')">← Föregående</button>
+                        <button @click="$emit('today')">Idag</button>
+                        <button @click="$emit('next')">Nästa →</button>
+                    </div>
+                `
+}
+
+const HeaderComponent = {
+    props: ["dynamicDate"],
+    components: { NavButtons },
+    template: `
+    <header class="header">
+            <h1>Svenssons Hantverk AB</h1>
+            <div class="inner-header">
+                <div class="inner-header-left">
+                <h2>Bemanningsöversikt</h2>
+                </div>
+                <div class="inner-header-right">
+                <p>{{ dynamicDate }}</p>
+                <nav-buttons
+                @prev="$emit('go-back')" 
+                @today="$emit('today')" 
+                @next="$emit('go-forward')">
+                </nav-buttons>
+                </div>
+                </div>
+                </header>
+                `
+}
+
+const WorkerInfo = {
+    template: `
+                <div class="worker-info">
+            <div class="worker-info-card">
+                <h2>Hantverkare helt lediga</h2>
+                <p>minst en hel ledig vecka</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+            </div>
+            <div class="worker-info-card">
+                <h2>Hantverkare med 50% kvar</h2>
+                <p>Kan ta ett jobb till</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+            </div>
+            <div class="worker-info-card">
+                <h2>Preliminärt bokade</h2>
+                <p>Kan frigöras om affären faller</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+                </div>
+                </div>
+                `
+}
+
+const StatusInfo = {
+    template: `
+        <div class="status-info">
+            <div class="status-info-text">
+                <img src="assets/100-small.svg" alt="100% Bokad" class="small-icon">
+                <p>Bokad(100%)</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/50-small.svg" alt="50% Bokad" class="small-icon">
+                <p>Bokad(50%)</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/prelim-small.svg" alt="100% Preliminärt Bokad" class="small-icon">
+                <p>Preliminär(100%)</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/prelim-50-small.svg" alt="50% Preliminärt Bokad" class="small-icon">
+                <p>Preliminär(50%)</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/absent-small.svg" alt="Frånvarande" class="small-icon">
+                <p>Frånvaro</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/free-small.svg" alt="Ledig" class="small-icon">
+                <p>Ledig</p>
+            </div>
+        </div>
+    `
+}
+
+const SortWorker = {
+    template: `
+        <div class="sort-worker">
+            <h3>Yrke:</h3>
+            <button @click="$emit('filter', 'Alla')">Alla</button>
+            <button @click="$emit('filter', 'Carpenter')">Snickare</button>
+            <button @click="$emit('filter', 'Electrician')">Elektriker</button>
+            <button @click="$emit('filter', 'Painter')">Målare</button>
+            <button @click="$emit('filter', 'Mason')">Murare</button>
+            <button @click="$emit('filter', 'Plumber')">Rörmokare</button>
+        </div>
+    `
+}
+
+const ScheduleDates = {
+    props: ["days"],
+    setup(props) {
+        const range = (startDate, endDate) => {
+            const start = new Date(startDate)
+            const end = new Date(endDate)
+
+            const day = { day: "numeric" }
+            const month = { month: "short" }
+
+            return `${start.toLocaleDateString('sv-SE', day)} ${start.toLocaleDateString('sv-SE', month)} - ` +
+                `${end.toLocaleDateString('sv-SE', day)} ${end.toLocaleDateString('sv-SE', month)}`;
+        }
+
+        const weeks = computed(() => {
+            if (!props.days || props.days.length === 0) return [];
+
+            return [0, 5, 10, 15].map(index => {
+                const monday = props.days[index]
+                const friday = props.days[index + 4]
+
+                return {
+                    nr: getWeekNumber(monday),
+                    range: range(monday, friday)
+                }
+            })
+        })
+
+        return { weeks }
+    },
+    template: `
+        <div class="dates">
+            <div v-for="week in weeks" :key="week.nr" class="dates-info">
+                <h2>v.{{ week.nr }}</h2>
+                <p>{{ week.range }}</p>
+            </div>
+        </div>
+    `
+}
+
 const DayIcon = {
     props: {
         bookingStatus: String
@@ -120,11 +260,15 @@ const WorkerRow = {
     },
     template: `
         <div class="worker-row">
-            <span>{{ worker.name }}</span>
-            <span class="profession">{{ formattedProfessions }}</span>
-            <div class="week" v-for="(week, index) in weeks" :key="index">
-                <day-icon v-for="day in week" :key="day.date" :booking-status="day.status">
-                </day-icon>
+            <div class="worker-name-profession">
+                <span class="name">{{ worker.name }}</span>
+                <span class="profession">{{ formattedProfessions }}</span>
+            </div>
+            <div class="weeks-container">
+                <div class="week" v-for="(week, index) in weeks" :key="index">
+                    <day-icon v-for="day in week" :key="day.date" :booking-status="day.status">
+                    </day-icon>
+                </div>
             </div>
         </div>
     `
@@ -148,146 +292,6 @@ const WorkerList = {
     `
 }
 
-const NavButtons = {
-    template: `
-        <div class="nav-buttons">
-            <button @click="$emit('prev')">Föregående</button>
-            <button @click="$emit('today')">Idag</button>
-            <button @click="$emit('next')">Nästa</button>
-        </div>
-    `
-}
-
-const HeaderComponent = {
-    props: ["dynamicDate"],
-    components: { NavButtons },
-    template: `
-        <header class="header">
-            <h1>Svenssons Hantverk AB</h1>
-            <div class="inner-header">
-                <div class="inner-header-left">
-                    <h2>Bemanningsöversikt</h2>
-                </div>
-                <div class="inner-header-right">
-                    <p>{{ dynamicDate }}</p>
-                    <nav-buttons
-                        @prev="$emit('go-back')" 
-                        @today="$emit('today')" 
-                        @next="$emit('go-forward')">
-                    </nav-buttons>
-                </div>
-            </div>
-        </header>
-    `
-}
-
-const WorkerInfo = {
-    template: `
-        <div class="worker-info">
-            <div class="worker-info-card">
-                <h2>Hantverkare helt lediga</h2>
-                <p>minst en hel ledig vecka</p>
-                <img src="assets/upsize-icon.svg" alt="upsize-icon">
-            </div>
-            <div class="worker-info-card">
-                <h2>Hantverkare med 50% kvar</h2>
-                <p>Kan ta ett jobb till</p>
-                <img src="assets/upsize-icon.svg" alt="upsize-icon">
-            </div>
-            <div class="worker-info-card">
-                <h2>Preliminärt bokade</h2>
-                <p>Kan frigöras om affären faller</p>
-                <img src="assets/upsize-icon.svg" alt="upsize-icon">
-            </div>
-        </div>
-    `
-}
-
-const StatusInfo = {
-    template: `
-        <div class="status-info">
-            <div class="status-info-text">
-                <img src="assets/100-small.svg" alt="100% Bokad" class="small-icon">
-                <p>Bokad(100%)</p>
-            </div>
-            <div class="status-info-text">
-                <img src="assets/50-small.svg" alt="50% Bokad" class="small-icon">
-                <p>Bokad(50%)</p>
-            </div>
-            <div class="status-info-text">
-                <img src="assets/prelim-small.svg" alt="100% Preliminärt Bokad" class="small-icon">
-                <p>Preliminär(100%)</p>
-            </div>
-            <div class="status-info-text">
-                <img src="assets/prelim-50-small.svg" alt="50% Preliminärt Bokad" class="small-icon">
-                <p>Preliminär(50%)</p>
-            </div>
-            <div class="status-info-text">
-                <img src="assets/absent-small.svg" alt="Frånvarande" class="small-icon">
-                <p>Frånvaro</p>
-            </div>
-            <div class="status-info-text">
-                <img src="assets/free-small.svg" alt="Ledig" class="small-icon">
-                <p>Ledig</p>
-            </div>
-        </div>
-    `
-}
-
-const SortWorker = {
-    template: `
-        <div class="sort-worker">
-            <h3>Yrke:</h3>
-            <input class="all" type="button" value="Alla">
-            <input class="carpenter" type="button" value="Snickare">
-            <input class="electrician" type="button" value="Elektriker">
-            <input class="painter" type="button" value="Målare">
-            <input class="plasterer" type="button" value="Murare">
-            <input class="plumber" type="button" value="Rörmokare">
-        </div>
-    `
-}
-
-const ScheduleDates = {
-    props: ["days"],
-    setup(props) {
-        const range = (startDate, endDate) => {
-            const start = new Date(startDate)
-            const end = new Date(endDate)
-
-            const day = { day: "numeric" }
-            const month = { month: "short" }
-
-            return `${start.toLocaleDateString('sv-SE', day)} ${start.toLocaleDateString('sv-SE', month)} - ` +
-                `${end.toLocaleDateString('sv-SE', day)} ${end.toLocaleDateString('sv-SE', month)}`;
-        }
-
-        const weeks = computed(() => {
-            if (!props.days || props.days.length === 0) return [];
-            
-            return [0, 5, 10, 15].map(index => {
-                const monday = props.days[index]
-                const friday = props.days[index + 4]
-
-                return {
-                    nr: getWeekNumber(monday),
-                    range: range(monday, friday)
-                }
-            })
-        })
-
-        return { weeks }
-    },
-    template: `
-        <div class="dates">
-            <div v-for="week in weeks" :key="week.nr" class="dates-info">
-                <h2>v.{{ week.nr }}</h2>
-                <p>{{ week.range }}</p>
-            </div>
-        </div>
-    `
-}
-
 const app = {
     components: {
         WorkerList,
@@ -302,7 +306,7 @@ const app = {
         const startDate = ref(new Date().toISOString().split("T")[0])
         const days = computed(() => getMonth(startDate.value))
 
-        //Funktion för att hämta data från api:et
+        //Function to get all data from the API
         const fetchData = async () => {
             try {
                 const resp = await fetch("https://yrgo-web-services.netlify.app/bookings")
@@ -315,11 +319,23 @@ const app = {
             }
         }
 
-        //Kör funktionen när DOM:en har mountats
+        //Runs the function when the DOM has been loaded
         onMounted(() => {
             fetchData()
         })
 
+        //Sorting function for workers
+        const selectedProfession = ref("Alla")
+
+        const selectedWorkers = computed(() => {
+            if (selectedProfession.value === "Alla") return workers.value
+
+            return workers.value.filter(worker =>
+                worker.professions.includes(selectedProfession.value)
+            )
+        })
+
+        //Function to make the dates dynamic
         const dynamicDate = computed(() => {
             if (days.value.length === 0) return "";
 
@@ -330,7 +346,7 @@ const app = {
             return `${firstDate.toLocaleDateString('sv-SE', options)} - ${lastDate.toLocaleDateString('sv-SE', options)}`;
         })
 
-        //Navigationsknappar
+        //Navigation buttons
         function goForward() {
             const d = new Date(startDate.value)
             d.setHours(12, 0, 0, 0);
@@ -351,7 +367,7 @@ const app = {
             startDate.value = new Date().toISOString().split('T')[0]
         }
 
-        return { workers, days, dynamicDate, goForward, goBack, today }
+        return { workers, days, selectedProfession, selectedWorkers, dynamicDate, goForward, goBack, today }
     }
 }
 

@@ -24,9 +24,9 @@
         <header-component :dynamic-date="dynamicDate" @go-back="goBack" @today="today" @go-forward="goForward"></header-component>
         <worker-info></worker-info>
         <status-info></status-info>
-        <sort-worker></sort-worker>
+        <sort-worker @filter="selectedProfession = $event"></sort-worker>
         <schedule-dates :days="days"></schedule-dates>
-        <worker-list :workers="workers" :days="days"></worker-list>
+        <worker-list :workers="selectedWorkers" :days="days"></worker-list>
     </div>
 </body>
 
