@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.container {
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    font-style: Inter, sans-serif;
+    padding: 1%;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+}
+
+.header h1 {
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.inner-header {
+    display: flex;
+    flex-direction: row;
+    width: 50rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inner-header-left {
+    /* not done yet */
+}
+
+.inner-header-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.worker-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.worker-info-card {
+    display: flex;
+    background-color: #EBEBEB;
+    width: 280px;
+    height: 94px;
+    border-radius: 12px;
+    margin-inline: 0.5rem;
+}
+
+.status-info {
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.status-info-text {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-inline: 0.25rem;
+}
+
+.small-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.dates {
+    display: flex;
+    flex-direction: row;
+}
+
+.worker-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.worker-row {
+    display: flex;
+    flex-direction: row;
+}

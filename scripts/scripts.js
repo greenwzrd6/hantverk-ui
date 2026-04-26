@@ -1,4 +1,4 @@
-import { ref, createApp, computed } from "vue";
+import { ref, createApp, computed, onMounted } from "vue";
 
 //Data
 const iconData =
@@ -16,289 +16,6 @@ const iconData =
     "Absent_Booked": "assets/100-absent.svg",
     "Absent_Preliminary": "assets/prelim-absent.svg"
 }
-
-const workerData = [
-    {
-        "id": 1,
-        "name": "Anders Björk",
-        "professions": ["Carpenter", "Mason"],
-        "bookings": [
-            { "activity": "Carpenter", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Mason", "percentage": 50, "status": "Preliminary", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Carpenter", "percentage": 100, "status": "Booked", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 2,
-        "name": "Björn Eriksson",
-        "professions": ["Electrician"],
-        "bookings": [
-            { "activity": "Electrician", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-05-01" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-04-21", "to": "2026-05-01" },
-            { "activity": "Electrician", "percentage": 100, "status": "Booked", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 3,
-        "name": "Carl Holm",
-        "professions": ["Painter"],
-        "bookings": [
-            { "activity": "Painter", "percentage": 50, "status": "Preliminary", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Painter", "percentage": 100, "status": "Booked", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 4,
-        "name": "David Lindqvist",
-        "professions": ["Mason"],
-        "bookings": [
-            { "activity": "Mason", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Mason", "percentage": 50, "status": "Booked", "from": "2026-05-04", "to": "2026-05-15" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 5,
-        "name": "Erik Magnusson",
-        "professions": ["Plumber"],
-        "bookings": [
-            { "activity": "Plumber", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Plumber", "percentage": 50, "status": "Preliminary", "from": "2026-04-29", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 6,
-        "name": "Filip Nilsson",
-        "professions": ["Carpenter"],
-        "bookings": [
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Carpenter", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Carpenter", "percentage": 100, "status": "Booked", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 7,
-        "name": "Gustav Olsson",
-        "professions": ["Carpenter"],
-        "bookings": [
-            { "activity": "Carpenter", "percentage": 50, "status": "Preliminary", "from": "2026-04-21", "to": "2026-04-25" },
-            { "activity": "Carpenter", "percentage": 100, "status": "Booked", "from": "2026-04-28", "to": "2026-05-08" },
-            { "activity": "Carpenter", "percentage": 50, "status": "Booked", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 8,
-        "name": "Hans Persson",
-        "professions": ["Electrician", "Plumber"],
-        "bookings": [
-            { "activity": "Electrician", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-05-01" },
-            { "activity": "Plumber", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-05-01" },
-            { "activity": "Plumber", "percentage": 100, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 9,
-        "name": "Ivan Qvist",
-        "professions": ["Painter", "Mason"],
-        "bookings": [
-            { "activity": "Painter", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Mason", "percentage": 100, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 10,
-        "name": "Jan Rydén",
-        "professions": ["Carpenter", "Electrician"],
-        "bookings": [
-            { "activity": "Carpenter", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Other", "percentage": 100, "status": "Absent", "from": "2026-04-29", "to": "2026-05-05" },
-            { "activity": "Electrician", "percentage": 50, "status": "Preliminary", "from": "2026-05-06", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 11,
-        "name": "Karl Svensson",
-        "professions": ["Carpenter", "Painter"],
-        "bookings": [
-            { "activity": "Carpenter", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-05-01" },
-            { "activity": "Painter", "percentage": 50, "status": "Preliminary", "from": "2026-04-21", "to": "2026-05-01" },
-            { "activity": "Painter", "percentage": 100, "status": "Booked", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 12,
-        "name": "Lars Thorén",
-        "professions": ["Painter"],
-        "bookings": [
-            { "activity": "Painter", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Painter", "percentage": 50, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 13,
-        "name": "Magnus Undén",
-        "professions": ["Mason"],
-        "bookings": [
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Mason", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Mason", "percentage": 100, "status": "Booked", "from": "2026-04-29", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 14,
-        "name": "Nils Viklund",
-        "professions": ["Plumber"],
-        "bookings": [
-            { "activity": "Plumber", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Plumber", "percentage": 50, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 15,
-        "name": "Oscar Wahlberg",
-        "professions": ["Carpenter"],
-        "bookings": [
-            { "activity": "Carpenter", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-25" },
-            { "activity": "Carpenter", "percentage": 100, "status": "Booked", "from": "2026-04-28", "to": "2026-05-08" },
-            { "activity": "Carpenter", "percentage": 50, "status": "Preliminary", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 16,
-        "name": "Petra Jansson",
-        "professions": ["Mason"],
-        "bookings": [
-            { "activity": "Mason", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Mason", "percentage": 50, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-08" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-05-04", "to": "2026-05-08" },
-            { "activity": "Other", "percentage": 100, "status": "Absent", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 17,
-        "name": "Pär Zetterberg",
-        "professions": ["Electrician"],
-        "bookings": [
-            { "activity": "Other", "percentage": 100, "status": "Absent", "from": "2026-04-21", "to": "2026-04-25" },
-            { "activity": "Electrician", "percentage": 100, "status": "Booked", "from": "2026-04-28", "to": "2026-05-08" },
-            { "activity": "Electrician", "percentage": 50, "status": "Booked", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 18,
-        "name": "Rolf Åberg",
-        "professions": ["Painter"],
-        "bookings": [
-            { "activity": "Painter", "percentage": 50, "status": "Preliminary", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Painter", "percentage": 100, "status": "Booked", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 19,
-        "name": "Stefan Öberg",
-        "professions": ["Mason"],
-        "bookings": [
-            { "activity": "Mason", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Mason", "percentage": 100, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-11" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-05-12", "to": "2026-05-15" },
-            { "activity": "Mason", "percentage": 50, "status": "Booked", "from": "2026-05-12", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 20,
-        "name": "Tobias Alm",
-        "professions": ["Plumber"],
-        "bookings": [
-            { "activity": "Plumber", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-04-29", "to": "2026-05-05" },
-            { "activity": "Plumber", "percentage": 50, "status": "Preliminary", "from": "2026-04-29", "to": "2026-05-05" },
-            { "activity": "Plumber", "percentage": 100, "status": "Booked", "from": "2026-05-06", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 21,
-        "name": "Ulf Berg",
-        "professions": ["Carpenter"],
-        "bookings": [
-            { "activity": "Carpenter", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-05-01" },
-            { "activity": "Carpenter", "percentage": 50, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 22,
-        "name": "Viktor Cederlund",
-        "professions": ["Electrician"],
-        "bookings": [
-            { "activity": "Electrician", "percentage": 50, "status": "Preliminary", "from": "2026-04-21", "to": "2026-04-25" },
-            { "activity": "Electrician", "percentage": 100, "status": "Booked", "from": "2026-04-28", "to": "2026-05-08" },
-            { "activity": "Electrician", "percentage": 50, "status": "Booked", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 23,
-        "name": "Xavier Ek",
-        "professions": ["Mason"],
-        "bookings": [
-            { "activity": "Mason", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-05-04", "to": "2026-05-08" },
-            { "activity": "Mason", "percentage": 50, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-08" },
-            { "activity": "Mason", "percentage": 100, "status": "Booked", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 24,
-        "name": "Walter Dahl",
-        "professions": ["Painter"],
-        "bookings": [
-            { "activity": "Painter", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-25" },
-            { "activity": "Painter", "percentage": 100, "status": "Booked", "from": "2026-04-28", "to": "2026-05-08" },
-            { "activity": "Painter", "percentage": 50, "status": "Preliminary", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 25,
-        "name": "Yngve Falk",
-        "professions": ["Plumber"],
-        "bookings": [
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Plumber", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Plumber", "percentage": 100, "status": "Booked", "from": "2026-04-29", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 26,
-        "name": "Zara Gunnarsson",
-        "professions": ["Carpenter"],
-        "bookings": [
-            { "activity": "Carpenter", "percentage": 50, "status": "Preliminary", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Carpenter", "percentage": 50, "status": "Booked", "from": "2026-05-04", "to": "2026-05-08" },
-            { "activity": "Carpenter", "percentage": 100, "status": "Booked", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 27,
-        "name": "Åsa Hedlund",
-        "professions": ["Electrician"],
-        "bookings": [
-            { "activity": "Electrician", "percentage": 50, "status": "Booked", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-04-21", "to": "2026-04-28" },
-            { "activity": "Electrician", "percentage": 100, "status": "Booked", "from": "2026-04-29", "to": "2026-05-08" },
-            { "activity": "Electrician", "percentage": 50, "status": "Preliminary", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    },
-    {
-        "id": 28,
-        "name": "Örjan Isaksson",
-        "professions": ["Painter"],
-        "bookings": [
-            { "activity": "Painter", "percentage": 100, "status": "Booked", "from": "2026-04-21", "to": "2026-04-30" },
-            { "activity": "Painter", "percentage": 50, "status": "Preliminary", "from": "2026-05-04", "to": "2026-05-08" },
-            { "activity": "Other", "percentage": 50, "status": "Absent", "from": "2026-05-04", "to": "2026-05-08" },
-            { "activity": "Other", "percentage": 100, "status": "Absent", "from": "2026-05-11", "to": "2026-05-15" }
-        ]
-    }
-]
 
 //Functions
 function getMonth(startDate) {
@@ -333,24 +50,23 @@ function getDateStatus(bookings, date) {
     return bookingStatus[0] + "_" + bookingStatus[1]
 }
 
-// Navigation
-const startDate = ref('2026-04-21')
-const days = computed(() => getMonth(startDate.value))
+function getWeekNumber(dateString) {
+    const date = new Date(dateString)
+    const dateCopy = new Date(date.valueOf())
 
-function goForward() {
-    const d = new Date(startDate.value)
-    d.setDate(d.getDate() + 28)
-    startDate.value = d.toISOString().split('T')[0]
-}
+    const dayNum = (date.getDay() + 6) % 7
 
-function goBack() {
-    const d = new Date(startDate.value)
-    d.setDate(d.getDate() - 28)
-    startDate.value = d.toISOString().split('T')[0]
-}
+    //ISO-datum är baserade på torsdagar
+    const firstThursday = dateCopy.setDate(dateCopy.getDate() - dayNum + 3).valueOf()
 
-function today() {
-    startDate.value = new Date().toISOString().split('T')[0]
+    dateCopy.setMonth(0, 1)
+
+    if (dateCopy.getDay() !== 4) {
+        dateCopy.setMonth(0, 1 + ((4 - dateCopy.getDay()) + 7) % 7)
+    }
+
+    // Returnerar veckonumret genom att ta den första torsdagen och ta 
+    return 1 + Math.ceil((firstThursday - dateCopy) / 604800000)
 }
 
 //Components
@@ -372,6 +88,19 @@ const WorkerRow = {
     },
     components: { DayIcon },
     setup(props) {
+        const translatedProfessions = {
+            "Carpenter": "Snickare",
+            "Mason": "Murare",
+            "Electrician": "Elektriker",
+            "Painter": "Målare",
+            "Plumber": "Rörmokare"
+        }
+
+        const formattedProfessions = computed(() => {
+            return props.worker.professions
+                .map(p => translatedProfessions[p] || p).join("/")
+        })
+
         const schedule = computed(() => {
             return props.days.map(date => ({
                 date,
@@ -387,11 +116,12 @@ const WorkerRow = {
             return result
         })
 
-        return { weeks }
+        return { weeks, formattedProfessions }
     },
     template: `
         <div class="worker-row">
             <span>{{ worker.name }}</span>
+            <span class="profession">{{ formattedProfessions }}</span>
             <div class="week" v-for="(week, index) in weeks" :key="index">
                 <day-icon v-for="day in week" :key="day.date" :booking-status="day.status">
                 </day-icon>
@@ -418,11 +148,210 @@ const WorkerList = {
     `
 }
 
+const NavButtons = {
+    template: `
+        <div class="nav-buttons">
+            <button @click="$emit('prev')">Föregående</button>
+            <button @click="$emit('today')">Idag</button>
+            <button @click="$emit('next')">Nästa</button>
+        </div>
+    `
+}
+
+const HeaderComponent = {
+    props: ["dynamicDate"],
+    components: { NavButtons },
+    template: `
+        <header class="header">
+            <h1>Svenssons Hantverk AB</h1>
+            <div class="inner-header">
+                <div class="inner-header-left">
+                    <h2>Bemanningsöversikt</h2>
+                </div>
+                <div class="inner-header-right">
+                    <p>{{ dynamicDate }}</p>
+                    <nav-buttons
+                        @prev="$emit('go-back')" 
+                        @today="$emit('today')" 
+                        @next="$emit('go-forward')">
+                    </nav-buttons>
+                </div>
+            </div>
+        </header>
+    `
+}
+
+const WorkerInfo = {
+    template: `
+        <div class="worker-info">
+            <div class="worker-info-card">
+                <h2>Hantverkare helt lediga</h2>
+                <p>minst en hel ledig vecka</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+            </div>
+            <div class="worker-info-card">
+                <h2>Hantverkare med 50% kvar</h2>
+                <p>Kan ta ett jobb till</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+            </div>
+            <div class="worker-info-card">
+                <h2>Preliminärt bokade</h2>
+                <p>Kan frigöras om affären faller</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+            </div>
+        </div>
+    `
+}
+
+const StatusInfo = {
+    template: `
+        <div class="status-info">
+            <div class="status-info-text">
+                <img src="assets/100-small.svg" alt="100% Bokad" class="small-icon">
+                <p>Bokad(100%)</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/50-small.svg" alt="50% Bokad" class="small-icon">
+                <p>Bokad(50%)</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/prelim-small.svg" alt="100% Preliminärt Bokad" class="small-icon">
+                <p>Preliminär(100%)</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/prelim-50-small.svg" alt="50% Preliminärt Bokad" class="small-icon">
+                <p>Preliminär(50%)</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/absent-small.svg" alt="Frånvarande" class="small-icon">
+                <p>Frånvaro</p>
+            </div>
+            <div class="status-info-text">
+                <img src="assets/free-small.svg" alt="Ledig" class="small-icon">
+                <p>Ledig</p>
+            </div>
+        </div>
+    `
+}
+
+const SortWorker = {
+    template: `
+        <div class="sort-worker">
+            <h3>Yrke:</h3>
+            <input class="all" type="button" value="Alla">
+            <input class="carpenter" type="button" value="Snickare">
+            <input class="electrician" type="button" value="Elektriker">
+            <input class="painter" type="button" value="Målare">
+            <input class="plasterer" type="button" value="Murare">
+            <input class="plumber" type="button" value="Rörmokare">
+        </div>
+    `
+}
+
+const ScheduleDates = {
+    props: ["days"],
+    setup(props) {
+        const range = (startDate, endDate) => {
+            const start = new Date(startDate)
+            const end = new Date(endDate)
+
+            const day = { day: "numeric" }
+            const month = { month: "short" }
+
+            return `${start.toLocaleDateString('sv-SE', day)} ${start.toLocaleDateString('sv-SE', month)} - ` +
+                `${end.toLocaleDateString('sv-SE', day)} ${end.toLocaleDateString('sv-SE', month)}`;
+        }
+
+        const weeks = computed(() => {
+            if (!props.days || props.days.length === 0) return [];
+            
+            return [0, 5, 10, 15].map(index => {
+                const monday = props.days[index]
+                const friday = props.days[index + 4]
+
+                return {
+                    nr: getWeekNumber(monday),
+                    range: range(monday, friday)
+                }
+            })
+        })
+
+        return { weeks }
+    },
+    template: `
+        <div class="dates">
+            <div v-for="week in weeks" :key="week.nr" class="dates-info">
+                <h2>v.{{ week.nr }}</h2>
+                <p>{{ week.range }}</p>
+            </div>
+        </div>
+    `
+}
+
 const app = {
-    components: { WorkerList },
+    components: {
+        WorkerList,
+        HeaderComponent,
+        WorkerInfo,
+        StatusInfo,
+        SortWorker,
+        ScheduleDates
+    },
     setup() {
-        const workers = ref(workerData)
-        return { workers, days, goForward, goBack, today }
+        const workers = ref([])
+        const startDate = ref(new Date().toISOString().split("T")[0])
+        const days = computed(() => getMonth(startDate.value))
+
+        //Funktion för att hämta data från api:et
+        const fetchData = async () => {
+            try {
+                const resp = await fetch("https://yrgo-web-services.netlify.app/bookings")
+                if (!resp.ok) throw new Error("Gick inte att hämta datan...")
+                const data = await resp.json()
+                workers.value = data
+            }
+            catch (e) {
+                console.error("Error: " + e)
+            }
+        }
+
+        //Kör funktionen när DOM:en har mountats
+        onMounted(() => {
+            fetchData()
+        })
+
+        const dynamicDate = computed(() => {
+            if (days.value.length === 0) return "";
+
+            const firstDate = new Date(days.value[0])
+            const lastDate = new Date(days.value[days.value.length - 1]);
+            const options = { day: 'numeric', month: 'short' };
+
+            return `${firstDate.toLocaleDateString('sv-SE', options)} - ${lastDate.toLocaleDateString('sv-SE', options)}`;
+        })
+
+        //Navigationsknappar
+        function goForward() {
+            const d = new Date(startDate.value)
+            d.setHours(12, 0, 0, 0);
+            d.setDate(d.getDate() + 28)
+            startDate.value = d.toISOString().split('T')[0]
+        }
+
+        function goBack() {
+            const d = new Date(startDate.value)
+            d.setHours(12, 0, 0, 0);
+            d.setDate(d.getDate() - 28)
+            startDate.value = d.toISOString().split('T')[0]
+        }
+
+        function today() {
+            const d = new Date()
+            d.setHours(12, 0, 0, 0);
+            startDate.value = new Date().toISOString().split('T')[0]
+        }
+
+        return { workers, days, dynamicDate, goForward, goBack, today }
     }
 }
 
