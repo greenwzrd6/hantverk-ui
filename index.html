@@ -31,18 +31,90 @@
             <input class="idag" type="button" value="Idag" @click="today">
             <input class="nästa" type="button" value="Nästa" @click="goForward">
         </div>
-        <div>
+        <div class="">
             <div>
                 <h2>Hantverkare helt lediga</h2>
                 <p>minst en hel ledig vecka</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
             </div>
             <div>
                 <h2>Hantverkare med 50% kvar</h2>
                 <p>Kan ta ett jobb till</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
             </div>
             <div>
-                <h2></h2>
-                <p></p>
+                <h2>Preliminärt bokade</h2>
+                <p>Kan frigöras om affären faller</p>
+                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+            </div>
+        </div>
+        <div class="job btns">
+            <div>
+                <p>Bokad(100%)</p>
+                <img src="assets/blue-small.svg" alt="blue-small-icon">
+            </div>
+                <div>
+                <p>Bokad(50%)</p>
+                <img src="assets/blue-white-dotted-small.svg" alt="blue-white-dotted-small-icon">
+            </div>
+                <div>
+                <p>Preliminär(100%)</p>
+                <img src="assets/orange-dashed-small.svg" alt="orange-dashed-small-icon">
+            </div>
+                <div>
+                <p>Preliminär(50%)</p>
+                <img src="assets/orange-dashed-white-dotted-small.svg" alt="orange-dashed-white-dotted-small-icon">
+            </div>
+                <div>
+                <p>Frånvaro</p>
+                <img src="assets/grey-small.svg" alt="grey-small-icon">
+            </div>
+            </div>
+                <div>
+                <p>Ledig</p>
+                <img src="assets/white-small.svg" alt="white-small-icon">
+            </div>
+
+            <div class="">
+                <h3>Yrke</h3>
+                <div>
+                    
+                    <input class="all" type="button">Alla</input>
+                </div>
+                <div>
+                    <input class="carpenter" type="button">Snickare</input>
+                </div>
+                <div>
+                    <input class="electrician" type="button">Elektriker</input>
+                </div>
+                <div>
+                    <input class="painter" type="button">Målare</input>
+                </div>
+                <div>
+                    <input class="plasterer" type="button">Murare</input>
+                </div>
+                <div>
+                    <input class="plumber" type="button">Rörmockare</input>
+                </div>
+            </div>
+        </div>
+
+        <div class="dates">
+            <div>
+                <h2>v.17</h2>
+                <p>20 april-26 april</p>
+            </div>
+            <div>
+                <h2>v.18</h2>
+                <p>27 april-3 maj</p>
+            </div>
+            <div>
+                <h2>v.19</h2>
+                <p>4 maj-10 maj</p>
+            </div>
+            <div>
+                <h2>v.20</h2>
+                <p>11 maj-17 maj</p>
             </div>
         </div>
         <worker-list :workers="workers" :days="days"></worker-list>
