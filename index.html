@@ -16,7 +16,7 @@
             }
         }
     </script>
-    <script type="module" src="scripts/scripts.js"></script>
+
 </head>
 
 <body>
@@ -26,19 +26,10 @@
             <p>Svenssons Hantverk AB</p>
             <p>21 apr. - 19 maj</p>
         </header>
-        <div class="">
-            <div>
-
-                <input class="föregående" type="button">Föregående</input>
-            </div>
-            <div>
-                
-                <input class="idag" type="button">Idag</input>
-            </div>
-            <div>
-                
-                <input class="nästa" type="button">Nästa</input>
-            </div>            
+        <div class="nav-buttons">
+            <input class="föregående" type="button" value="Föregående" @click="goBack">
+            <input class="idag" type="button" value="Idag" @click="today">
+            <input class="nästa" type="button" value="Nästa" @click="goForward">
         </div>
         <div>
             <div>
@@ -54,8 +45,9 @@
                 <p></p>
             </div>
         </div>
-
+        <worker-list :workers="workers" :days="days"></worker-list>
     </div>
+    <script type="module" src="scripts/scripts.js"></script>
 </body>
 
 </html>
