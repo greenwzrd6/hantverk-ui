@@ -72,40 +72,40 @@ function getWeekNumber(dateString) {
 //Components
 const NavButtons = {
     template: `
-                    <div class="nav-buttons">
-                        <button @click="$emit('prev')">← Föregående</button>
-                        <button @click="$emit('today')">Idag</button>
-                        <button @click="$emit('next')">Nästa →</button>
-                    </div>
-                `
+        <div class="nav-buttons">
+            <button @click="$emit('prev')">← Föregående</button>
+            <button @click="$emit('today')">Idag</button>
+            <button @click="$emit('next')">Nästa →</button>
+        </div>
+    `
 }
 
 const HeaderComponent = {
     props: ["dynamicDate"],
     components: { NavButtons },
     template: `
-    <header class="header">
+        <header class="header">
             <h1>Svenssons Hantverk AB</h1>
             <div class="inner-header">
                 <div class="inner-header-left">
-                <h2>Bemanningsöversikt</h2>
+                    <h2>Bemanningsöversikt</h2>
                 </div>
                 <div class="inner-header-right">
-                <p>{{ dynamicDate }}</p>
-                <nav-buttons
-                @prev="$emit('go-back')" 
-                @today="$emit('today')" 
-                @next="$emit('go-forward')">
-                </nav-buttons>
+                    <p>{{ dynamicDate }}</p>
+                    <nav-buttons
+                        @prev="$emit('go-back')" 
+                        @today="$emit('today')" 
+                        @next="$emit('go-forward')">
+                    </nav-buttons>
                 </div>
-                </div>
-                </header>
-                `
+            </div>
+        </header>
+    `
 }
 
 const WorkerInfo = {
     template: `
-                <div class="worker-info">
+        <div class="worker-info">
             <div class="worker-info-card">
                 <h2>Hantverkare helt lediga</h2>
                 <p>minst en hel ledig vecka</p>
@@ -120,9 +120,9 @@ const WorkerInfo = {
                 <h2>Preliminärt bokade</h2>
                 <p>Kan frigöras om affären faller</p>
                 <img src="assets/upsize-icon.svg" alt="upsize-icon">
-                </div>
-                </div>
-                `
+            </div>
+        </div>
+    `
 }
 
 const StatusInfo = {
