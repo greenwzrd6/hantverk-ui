@@ -9,7 +9,7 @@ const iconData =
     "Absent": "assets/absent.svg",
     "Free": "assets/free.svg",
 
-    //50%/50%
+    // 50%/50%
     "Booked_Preliminary": "assets/prelim-100.svg",
     "Free_Booked": "assets/50.svg",
     "Free_Preliminary": "assets/prelim-50.svg",
@@ -103,23 +103,39 @@ const HeaderComponent = {
     `
 }
 
+const UpsizeButton = {
+    template: `
+        <button @click="$emit('upsize')"><img src="assets/upsize-icon.svg" alt="upsize-icon"></button>
+    `
+}
+
 const WorkerInfo = {
+    components: { UpsizeButton },
     template: `
         <div class="worker-info">
             <div class="worker-info-card">
-                <h2>Hantverkare helt lediga</h2>
-                <p>minst en hel ledig vecka</p>
-                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+                <div class="worker-info-card-text">
+                    <h2>8</h2>
+                    <h3>Hantverkare helt lediga</h3>
+                    <p>minst en hel ledig vecka</p>
+                </div>
+                <upsize-button @upsize="$emit('enlarge')"></upsize-button>
             </div>
             <div class="worker-info-card">
-                <h2>Hantverkare med 50% kvar</h2>
-                <p>Kan ta ett jobb till</p>
-                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+                <div class="worker-info-card-text">
+                    <h2>8</h2>
+                    <h3>Hantverkare med 50% kvar</h3>
+                    <p>Kan ta ett jobb till</p>
+                </div>
+                <upsize-button @upsize="$emit('enlarge')"></upsize-button>
             </div>
             <div class="worker-info-card">
-                <h2>Preliminärt bokade</h2>
-                <p>Kan frigöras om affären faller</p>
-                <img src="assets/upsize-icon.svg" alt="upsize-icon">
+                <div class="worker-info-card-text">
+                    <h2>8</h2>
+                    <h3>Preliminärt bokade</h3>
+                    <p>Kan frigöras om affären faller</p>
+                </div>
+                <upsize-button @upsize="$emit('enlarge')"></upsize-button>
             </div>
         </div>
     `
@@ -203,7 +219,7 @@ const ScheduleDates = {
     template: `
         <div class="dates">
             <div v-for="week in weeks" :key="week.nr" class="dates-info">
-                <h2>v.{{ week.nr }}</h2>
+                <h3>v.{{ week.nr }}</h3>
                 <p>{{ week.range }}</p>
             </div>
         </div>
